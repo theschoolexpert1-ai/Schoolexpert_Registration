@@ -1,0 +1,21 @@
+//To Check the current filds
+
+SELECT
+  (SELECT COUNT(*) FROM "Submission") AS submissions,
+  (SELECT COUNT(*) FROM "Answer") AS answers,
+  (SELECT COUNT(*) FROM "FileUpload") AS file_uploads;
+
+
+//to reset and make it zero
+
+BEGIN;
+
+DELETE FROM "Submission";
+
+COMMIT;
+
+//datbase setup
+
+npx prisma generate 
+
+npm run prisma:seed   

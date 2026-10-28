@@ -1,0 +1,16 @@
+{
+  "format": "forms-data-production-mapping",
+  "version": 2,
+  "forms": {
+    "alternative-school": { "targetFormId": "production-form-id" }
+  },
+  "versions": {
+    "alternative-school:v1": { "targetVersionId": "production-version-id" }
+  },
+  "sections": {
+    "alternative-school:v1:section-id": { "targetSectionId": "production-section-id" }
+  },
+  "questions": {
+    "alternative-school:v1:school_name": { "targetQuestionId": "production-question-id" }
+  }
+}

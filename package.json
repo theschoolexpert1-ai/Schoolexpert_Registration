@@ -1,0 +1,48 @@
+{
+  "name": "school-expert-registration-forms",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:seed": "prisma db seed",
+    "prisma:migrate:deploy": "prisma migrate deploy",
+    "prisma:backfill": "node prisma/backfill.mjs",
+    "data:export": "node scripts/export-data.mjs",
+    "data:validate": "node scripts/validate-export.mjs",
+    "data:migration:plan": "node scripts/migration-plan.mjs",
+    "data:migration:init": "node scripts/init-mapping.mjs",
+    "data:migration:dry-run": "node scripts/migration-dry-run.mjs",
+    "data:migration:import": "node scripts/import-to-postgres.mjs",
+    "data:migration:verify": "node scripts/verify-migration.mjs",
+    "data:migration:mark": "node scripts/mark-migrated.mjs",
+    "data:migration:auto-map": "node scripts/auto-map.mjs",
+    "data:storage:backfill": "node scripts/backfill-storage.mjs",
+    "data:storage:check": "node scripts/check-storage.mjs",
+    "data:validate:admission-media": "node scripts/validate-admission-media.mjs"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.mjs"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.6.0",
+    "next": "^15.3.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "zod": "^3.24.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.2",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "eslint": "^9.25.0",
+    "eslint-config-next": "^15.3.1",
+    "prisma": "^6.6.0",
+    "tailwindcss": "^4.1.5",
+    "typescript": "^5.8.3"
+  }
+}

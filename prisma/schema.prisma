@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum QuestionType {
+  text
+  textarea
+  select
+  radio
+  checkbox
+  file
+}
+
+enum SubmissionStatus {
+  DRAFT
+  SUBMITTED
+  MIGRATED
+  MIGRATION_FAILED
+}
+
+model Form {
+  id             String        @id
+  slug           String        @unique
+  title          String
+  description    String?
+  currentVersion Int           @default(1)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  versions       FormVersion[]
+  submissions    Submission[]
+}
+
+model FormVersion {
+  id           String        @id
+  formId       String
+  version      Int
+  title        String
+  description  String?
+  createdAt    DateTime      @default(now())
+  form         Form          @relation(fields: [formId], references: [id], onDelete: Cascade)
+  sections     FormSection[]
+  questions    FormQuestion[]
+  submissions  Submission[]
+  @@unique([formId, version])
+  @@index([formId, version])
+}
+
+model FormSection {
+  id          String      @id
+  versionId   String
+  title       String
+  position    Int
+  version     FormVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+  questions   FormQuestion[]
+  @@unique([versionId, position])
+  @@index([versionId])
+}
+
+model FormQuestion {
+  id          String           @id
+  versionId   String
+  sectionId   String
+  key         String
+  label       String
+  type        QuestionType
+  required    Boolean          @default(false)
+  allowOther  Boolean          @default(false)
+  validation  String?
+  position    Int
+  version     FormVersion      @relation(fields: [versionId], references: [id], onDelete: Cascade)
+  section     FormSection      @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  options     FormQuestionOption[]
+  answers     Answer[]
+  @@unique([versionId, key])
+  @@unique([sectionId, position])
+  @@index([versionId])
+  @@index([sectionId])
+}
+
+model FormQuestionOption {
+  id          String       @id @default(cuid())
+  questionId  String
+  value       String
+  position    Int
+  question    FormQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  @@unique([questionId, value])
+  @@unique([questionId, position])
+}
+
+model Submission {
+  id               String           @id @default(cuid())
+  formId           String
+  formVersionId    String
+  status            SubmissionStatus @default(SUBMITTED)
+  createdAt        DateTime         @default(now())
+  submittedAt      DateTime?
+  migratedAt       DateTime?
+  migrationError   String?
+  form             Form             @relation(fields: [formId], references: [id], onDelete: Restrict)
+  formVersion      FormVersion      @relation(fields: [formVersionId], references: [id], onDelete: Restrict)
+  answers          Answer[]
+  @@index([formId, createdAt])
+  @@index([formVersionId, createdAt])
+  @@index([status])
+}
+
+model Answer {
+  id            String       @id @default(cuid())
+  submissionId  String
+  questionId    String
+  value         Json
+  submission    Submission   @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  question      FormQuestion @relation(fields: [questionId], references: [id], onDelete: Restrict)
+  uploads       FileUpload[]
+  @@unique([submissionId, questionId])
+  @@index([questionId])
+}
+
+model FileUpload {
+  id          String   @id @default(cuid())
+  answerId    String
+  filename    String
+  mimeType    String
+  bytes       Bytes?
+  storagePath String?
+  size        Int?
+  createdAt   DateTime @default(now())
+  answer      Answer   @relation(fields: [answerId], references: [id], onDelete: Cascade)
+  @@index([answerId])
+}

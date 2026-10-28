@@ -1,0 +1,16 @@
+{
+  "format": "forms-data-production-mapping",
+  "version": 2,
+  "forms": {
+    "example-form-slug": { "targetFormId": "" }
+  },
+  "versions": {
+    "example-form-slug:v1": { "targetVersionId": "" }
+  },
+  "sections": {
+    "example-form-slug:v1:source-section-id": { "targetSectionId": "" }
+  },
+  "questions": {
+    "example-form-slug:v1:stable_question_key": { "targetQuestionId": "" }
+  }
+}
